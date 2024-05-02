@@ -1,11 +1,12 @@
 package sba.sms.models;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -17,10 +18,32 @@ import java.util.Set;
  * Implement Lombok annotations to eliminate boilerplate code.
  */
 
+@Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
+@Table(name = "student")
 public class Student {
+    @Column(name = "email")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String email;
+    private String name;
+    private String password;
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "student_courses",
+            joinColumns = {@JoinColumn(name = "student_email")},
+            inverseJoinColumns = {@JoinColumn(name = "courses_id")})
 
+    private Set<Course> courses = new HashSet<>();
 
+    public String toString() {
+        return ("email" + getEmail() + "Student Name" + getName() + "Password" + getPassword() + "Courses" + getCourses());
     }
-
+}
+//toString (exclude collections to avoid infinite loops)
+//override equals and hashcode methods (don't use lombok here)
+//helper method
 
 
