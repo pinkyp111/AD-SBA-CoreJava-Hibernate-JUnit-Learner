@@ -15,7 +15,7 @@ import java.util.Scanner;
  * Business Requirement:
  * The task is to create a basic School Management System
  * where students can register for courses, and view the course assigned to them.
- *<br />
+ * <br />
  * App uses <br />
  * Initialize dummy data: {@link CommandLine#addData()} <br />
  * Two models: {@link Student} & {@link Course} <br />
@@ -25,18 +25,18 @@ import java.util.Scanner;
  * <b style="color:red">WARNING! </b>
  * <b>DO NOT MODIFY THIS CODE</b>
  *
- * @author  Jafer Alhaboubi & LaTonya Lewis
+ * @author Jafer Alhaboubi & LaTonya Lewis
  * @since sba-core-java-hibernate-junit 1.0
  */
 
 @Log
 public class App {
-    static final  StudentService studentService = new StudentService();
-    static final  CourseService courseService = new CourseService();
+    static final StudentService studentService = new StudentService();
+    static final CourseService courseService = new CourseService();
 
     public static void main(String[] args) {
 
-       CommandLine.addData();
+        CommandLine.addData();
 
         Scanner input = new Scanner(System.in);
         int userInput;
@@ -60,13 +60,13 @@ public class App {
                         System.out.printf("%-2s | %-20s | %s%n", "ID", "Course", "Instructor");
                         if (courseList.isEmpty()) System.out.printf("No courses to view%n");
                         for (Course course : courseList) {
-                            System.out.printf("%-2d | %-20s | %s%n", course.getId(), course.getName(), course.getInstructor());
+                            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCoursename(), course.getInstructorname());
                         }
                         System.out.print("select course #: ");
                         int courseId = input.nextInt();
                         if (courseId > 0 && courseId <= courseList.size()) {
                             studentService.registerStudentToCourse(email, (courseId));
-                            System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getName());
+                            System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getCoursename());
                             printStudentCourses(email);
                         } else {
                             System.out.printf("course id not found!%n");
@@ -87,7 +87,7 @@ public class App {
         List<Course> userCourses = studentService.getStudentCourses(email);
         if (userCourses.isEmpty()) System.out.printf("No courses to view%n");
         for (Course course : userCourses) {
-            System.out.printf("%-2d | %-20s | %s%n", course.getId(), course.getName(), course.getInstructor());
+            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCoursename(), course.getInstructorname());
         }
     }
 }

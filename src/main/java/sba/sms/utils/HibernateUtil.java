@@ -13,8 +13,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  * The session configuration derives from the hibernate.cfg.xml file in
  * the 'resources' folder.
  *
- *  <b style="color:red">WARNING! </b>
- *  <b>DO NOT MODIFY THIS CODE</b>
+ * <b style="color:red">WARNING! </b>
+ * <b>DO NOT MODIFY THIS CODE</b>
  */
 public class HibernateUtil {
     private HibernateUtil() {
@@ -31,14 +31,12 @@ public class HibernateUtil {
     /**
      * Method builds a session factory from the 'hibernate.cfg.xml' file
      * in the 'resources' folder and returns a sessionFactory object.
+     *
      * @return
      */
-    private static SessionFactory buildSessionFactory()
-    {
-        try
-        {
-            if (sessionFactory == null)
-            {
+    private static SessionFactory buildSessionFactory() {
+        try {
+            if (sessionFactory == null) {
                 StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
                         .configure("hibernate.cfg.xml").build();
 
