@@ -1,7 +1,9 @@
 package sba.sms.utils;
 
 import sba.sms.models.Course;
+import sba.sms.models.Student;
 import sba.sms.services.CourseService;
+import sba.sms.services.StudentService;
 
 //import  sba.sms.App.courseService;
 
@@ -28,8 +30,6 @@ public class CommandLine {
      * re-runs.
      */
     public static void addData() {
-        /*
-
         StudentService studentService = new StudentService();
 
         studentService.createStudent(new Student("reema@gmail.com", "reema brown", PASSWORD));
@@ -37,7 +37,7 @@ public class CommandLine {
         studentService.createStudent(new Student("anthony@gmail.com", "anthony gallegos", PASSWORD));
         studentService.createStudent(new Student("ariadna@gmail.com", "ariadna ramirez", PASSWORD));
         studentService.createStudent(new Student("bolaji@gmail.com", "bolaji saibu", PASSWORD));
-        studentService.createStudent(new Student("shirese@gmail.com", "shirese smith", PASSWORD));*/
+        studentService.createStudent(new Student("shirese@gmail.com", "shirese smith", PASSWORD));
 
         CourseService courseService = new CourseService();
         courseService.createCourse(new Course("Java", "Roger Boaitey"));
@@ -48,7 +48,6 @@ public class CommandLine {
         courseService.createCourse(new Course("GitHub", "Igor Adulyan"));
         courseService.createCourse(new Course("Web Services", "Raheem Abolfathzadeh"));
         courseService.createCourse(new Course("Microservices", "Eric Heilig"));
-
 
     }
 }

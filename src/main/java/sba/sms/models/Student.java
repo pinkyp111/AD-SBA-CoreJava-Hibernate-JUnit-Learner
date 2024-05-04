@@ -1,12 +1,10 @@
 package sba.sms.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -25,25 +23,51 @@ import java.util.Set;
 @Setter
 @Table(name = "student")
 public class Student {
-    @Column(name = "email")
+    @Column(name = "email", length = 50)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String email;
+    @NonNull
+    @Column(length = 50)
     private String name;
+    @NonNull
+    @Column(length = 50)
     private String password;
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.EAGER)
     @JoinTable(name = "student_courses",
             joinColumns = {@JoinColumn(name = "student_email")},
             inverseJoinColumns = {@JoinColumn(name = "courses_id")})
-
     private Set<Course> courses = new HashSet<>();
 
+    @Override
     public String toString() {
         return ("email" + getEmail() + "Student Name" + getName() + "Password" + getPassword() + "Courses" + getCourses());
     }
+
+    public Student(String email, @NonNull String name, @NonNull String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(email, student.email) && Objects.equals(name, student.name) && Objects.equals(password, student.password) && Objects.equals(courses, student.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, name, password, courses);
+    }
+
+    public void addCourse(Course c) {
+        this.getCourses().add(c);
+    }
+
 }
-//toString (exclude collections to avoid infinite loops)
-//override equals and hashcode methods (don't use lombok here)
-//helper method
 
 

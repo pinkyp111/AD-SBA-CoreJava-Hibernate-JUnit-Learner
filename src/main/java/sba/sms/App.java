@@ -60,13 +60,13 @@ public class App {
                         System.out.printf("%-2s | %-20s | %s%n", "ID", "Course", "Instructor");
                         if (courseList.isEmpty()) System.out.printf("No courses to view%n");
                         for (Course course : courseList) {
-                            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCoursename(), course.getInstructorname());
+                            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCourseName(), course.getInstructorName());
                         }
                         System.out.print("select course #: ");
                         int courseId = input.nextInt();
                         if (courseId > 0 && courseId <= courseList.size()) {
                             studentService.registerStudentToCourse(email, (courseId));
-                            System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getCoursename());
+                            System.out.printf("successfully register %s to %s%n", studentService.getStudentByEmail(email).getName(), courseService.getCourseById(courseId).getCourseName());
                             printStudentCourses(email);
                         } else {
                             System.out.printf("course id not found!%n");
@@ -87,7 +87,7 @@ public class App {
         List<Course> userCourses = studentService.getStudentCourses(email);
         if (userCourses.isEmpty()) System.out.printf("No courses to view%n");
         for (Course course : userCourses) {
-            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCoursename(), course.getInstructorname());
+            System.out.printf("%-2d | %-20s | %s%n", course.getCourse_id(), course.getCourseName(), course.getInstructorName());
         }
     }
 }

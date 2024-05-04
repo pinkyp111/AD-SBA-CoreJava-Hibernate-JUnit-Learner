@@ -19,57 +19,50 @@ public class CourseService implements CourseI {
 
     @Override
     public void createCourse(Course course) {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
-        Session session = factory.openSession();
-        Transaction transaction = session.beginTransaction();
-        CourseService courseService = new CourseService();
-        try {
-            Course course1 = new Course();
-            Course course2 = new Course();
-            Course course3 = new Course();
-            Course course4 = new Course();
-            Course course5 = new Course();
-            Course course6 = new Course();
-            Course course7 = new Course();
-            Course course8 = new Course();
-
-            session.persist(course1);
-            session.persist(course2);
-            session.persist(course3);
-            session.persist(course4);
-            session.persist(course5);
-            session.persist(course6);
-            session.persist(course7);
-            session.persist(course8);
-
-            transaction.commit();
-            System.out.println("Courses added successfully");
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
+        if (course == null) {
+            System.out.println("Course cannot be empty. Please provide a valid course!");
+        } else {
+            Transaction transaction = null;
+            try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
+                 Session session = factory.openSession()) {
+                transaction = session.beginTransaction();
+                session.persist(course);
+                transaction.commit();
+                System.out.println("Courses added successfully");
+            } catch (Exception e) {
+                if (transaction != null)
+                    transaction.rollback();
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public Course getCourseById(int courseId) {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
-        Session session = factory.openSession();
-        Transaction transaction = session.beginTransaction();
-        String hql = "FROM Course c WHERE c.course_id>0";
+        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
+             Session session = factory.openSession()) {
+            return getCourseFromDB(courseId, session);
+        }
+    }
+
+    public Course getCourseById(int courseId, Session session) {
+        return getCourseFromDB(courseId, session);
+    }
+
+    private Course getCourseFromDB(int courseId, Session session) {
+        String hql = String.format("FROM Course c WHERE c.course_id=%d", courseId);
         TypedQuery<Course> query = session.createQuery(hql, Course.class);
         List<Course> results = query.getResultList();
-        // System.out.printf("%s%13s%17s%34s%21s%n", "|User Id", "|Full name", "|Email", "|Password", "|Salary");
-        for (Course c : results) {
-            System.out.println(c.getCourse_id() + " " + c.getCoursename() + " " + c.getInstructorname() + " " + c.getStudents());
-        }
-
-        return (Course) results;
+        return results != null && !results.isEmpty() ? results.get(0) : null;
     }
 
 
     @Override
     public List<Course> getAllCourses() {
-
-        return null;
+        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
+             Session session = factory.openSession()) {
+            return session.createQuery("SELECT c FROM Course c", Course.class).getResultList();
+        }
     }
+
 }

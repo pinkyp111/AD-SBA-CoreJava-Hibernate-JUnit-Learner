@@ -3,10 +3,13 @@ package sba.sms.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
 
 /**
  * Course is a POJO, configured as a persistent class that represents (or maps to) a table
@@ -16,10 +19,7 @@ import java.util.Set;
  */
 
 @Entity
-//@Data
 @NoArgsConstructor
-//@RequiredArgsConstructor
-//@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "course")
@@ -28,21 +28,40 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int course_id;//primary key
-    private String Coursename;
-    private String Instructorname;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "courses")
+    @NonNull
+    @Column(length = 50)
+    private String courseName;
+    @NonNull
+    @Column(length = 50)
+    private String instructorName;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},
+            fetch = FetchType.EAGER, mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
 
-    public Course(String Coursename, String InstructorName) {
-        this.Coursename = Coursename;
-        this.Instructorname = InstructorName;
+    public Course(String courseName, String InstructorName) {
+        this.courseName = courseName;
+        this.instructorName = InstructorName;
     }
 
     public String toString() {
-        return ("id" + getCourse_id() + "Course Name" + getCoursename() + "Instructor Name" + getInstructorname());
+        return ("id" + getCourse_id() + "Course Name" + getCourseName() + "Instructor Name" + getInstructorName());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return course_id == course.course_id && Objects.equals(courseName, course.courseName) && Objects.equals(instructorName, course.instructorName) && Objects.equals(students, course.students);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(course_id, courseName, instructorName);
+    }
+
+    public void addStudent(Student s) {
+        this.getStudents().add(s);
+    }
 }
-//toString (exclude collections to avoid infinite loops)
-//override equals and hashcode methods (don't use lombok here)
-//helper method
