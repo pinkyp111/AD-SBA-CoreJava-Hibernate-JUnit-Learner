@@ -1,10 +1,7 @@
 package sba.sms.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -20,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Table(name = "course")
@@ -38,11 +36,6 @@ public class Course {
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST},
             fetch = FetchType.EAGER, mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
-
-    public Course(String courseName, String InstructorName) {
-        this.courseName = courseName;
-        this.instructorName = InstructorName;
-    }
 
     public String toString() {
         return ("id" + getCourse_id() + "Course Name" + getCourseName() + "Instructor Name" + getInstructorName());
