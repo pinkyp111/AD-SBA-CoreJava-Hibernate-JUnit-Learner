@@ -71,16 +71,8 @@ public class StudentService implements StudentI {
 
     @Override
     public boolean validateStudent(String email, String password) {
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
-            String hql = String.format(" FROM Student s WHERE s.email='%s' and s.password='%s' ", email, password);
-            TypedQuery<Student> query = session.createQuery(hql, Student.class);
-            List<Student> results = query.getResultList();
-            if (Objects.nonNull(results) && !results.isEmpty()) {
-                return true;
-            }
-        }
-        return false;
+        Student studentFromDB = getStudentByEmail(email);
+        return studentFromDB.getPassword().equals(password);
     }
 
     @Override
