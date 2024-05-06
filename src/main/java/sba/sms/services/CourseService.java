@@ -17,6 +17,9 @@ import java.util.List;
  */
 public class CourseService implements CourseI {
 
+    /**
+     *          Inserting courses into DB
+     */
     @Override
     public void createCourse(Course course) {
         if (course == null) {
@@ -37,6 +40,7 @@ public class CourseService implements CourseI {
         }
     }
 
+    //Getting course back from DB based on courseId
     @Override
     public Course getCourseById(int courseId) {
         try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
@@ -45,6 +49,7 @@ public class CourseService implements CourseI {
         }
     }
 
+    //used to register student
     public Course getCourseById(int courseId, Session session) {
         return getCourseFromDB(courseId, session);
     }
@@ -53,10 +58,12 @@ public class CourseService implements CourseI {
         String hql = String.format("FROM Course c WHERE c.course_id=%d", courseId);
         TypedQuery<Course> query = session.createQuery(hql, Course.class);
         List<Course> results = query.getResultList();
-        return results != null && !results.isEmpty() ? results.get(0) : null;
+        boolean isResultAvailable = results != null && !results.isEmpty();//The boolean variable isResultAvailable is set to true if the results list is not null and not empty:
+        return isResultAvailable ? results.get(0) : null;//If results are available, we return the first course from the list
     }
 
 
+   //Getting all courses back from DB
     @Override
     public List<Course> getAllCourses() {
         try (SessionFactory factory = new Configuration().configure().buildSessionFactory();

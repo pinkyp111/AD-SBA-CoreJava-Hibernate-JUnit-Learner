@@ -66,7 +66,8 @@ public class StudentService implements StudentI {
         String hql = String.format("FROM Student s WHERE s.email='%s'", email);
         TypedQuery<Student> query = session.createQuery(hql, Student.class);
         List<Student> results = query.getResultList();
-        return results != null && !results.isEmpty() ? results.get(0) : null;
+        boolean isResultAvailable = results != null && !results.isEmpty();
+        return isResultAvailable ? results.get(0) : null;
     }
 
     @Override

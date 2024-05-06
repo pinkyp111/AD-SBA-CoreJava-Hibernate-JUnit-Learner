@@ -41,6 +41,9 @@ public class Course {
         return ("id" + getCourse_id() + "Course Name" + getCourseName() + "Instructor Name" + getInstructorName());
     }
 
+    /**
+     *      equals method compares course_id,courseName,instructorName whenever a new course is added to the set of courses
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,11 +52,17 @@ public class Course {
         return course_id == course.course_id && Objects.equals(courseName, course.courseName) && Objects.equals(instructorName, course.instructorName) && Objects.equals(students, course.students);
     }
 
+    /**
+     *     hashCode() method calculates hash value based on these columns
+     */
     @Override
     public int hashCode() {
         return Objects.hash(course_id, courseName, instructorName);
     }
 
+    /**
+     *          Helper method used to add student to the student set
+     */
     public void addStudent(Student s) {
         this.getStudents().add(s);
     }

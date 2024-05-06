@@ -51,6 +51,7 @@ public class Student {
         this.password = password;
     }
 
+   //equals method compares email,studentName,password whenever a new student is added to the set of students
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,11 +60,13 @@ public class Student {
         return Objects.equals(email, student.email) && Objects.equals(name, student.name) && Objects.equals(password, student.password) && Objects.equals(courses, student.courses);
     }
 
+    //hashCode() method calculates hash value based on these columns
     @Override
     public int hashCode() {
         return Objects.hash(email, name, password, courses);
     }
 
+    //Helper method used to add course to set of courses student is taking
     public void addCourse(Course c) {
         this.getCourses().add(c);
     }
