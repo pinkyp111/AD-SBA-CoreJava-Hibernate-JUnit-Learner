@@ -6,6 +6,7 @@ import sba.sms.models.Student;
 import sba.sms.services.CourseService;
 import sba.sms.services.StudentService;
 import sba.sms.utils.CommandLine;
+import sba.sms.utils.HibernateUtil;
 
 import java.util.List;
 import java.util.Scanner;
@@ -80,6 +81,7 @@ public class App {
             }
         } while (userInput != 2);
         input.close();
+        HibernateUtil.shutdown();
     }
 
     private static void printStudentCourses(String email) {

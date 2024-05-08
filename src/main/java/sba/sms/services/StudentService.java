@@ -4,14 +4,13 @@ import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import sba.sms.dao.StudentI;
 import sba.sms.models.Course;
 import sba.sms.models.Student;
+import sba.sms.utils.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * StudentService is a concrete class. This class implements the
@@ -24,20 +23,20 @@ public class StudentService implements StudentI {
 
     @Override
     public List<Student> getAllStudents() {
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
-            String hql = "FROM Student ";
-            TypedQuery<Student> query = session.createNamedQuery(hql, Student.class);
-            return query.getResultList();
-        }
+        SessionFactory factory = HibernateUtil.getSessionFactory();
+        Session session = factory.openSession();
+        String hql = "FROM Student ";
+        TypedQuery<Student> query = session.createNamedQuery(hql, Student.class);
+        return query.getResultList();
     }
 
     @Override
     public void createStudent(Student student) {
         if (student != null) {
             Transaction transaction = null;
-            try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-                 Session session = factory.openSession()) {
+            try {
+                SessionFactory factory = HibernateUtil.getSessionFactory();
+                Session session = factory.openSession();
                 transaction = session.beginTransaction();
                 session.persist(student);
                 transaction.commit();
@@ -52,10 +51,10 @@ public class StudentService implements StudentI {
 
     @Override
     public Student getStudentByEmail(String email) {
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
-            return getStudentFromDB(email, session);
-        }
+        SessionFactory factory = HibernateUtil.getSessionFactory();
+        Session session = factory.openSession();
+        return getStudentFromDB(email, session);
+
     }
 
     public Student getStudentByEmail(String email, Session session) {
@@ -79,8 +78,9 @@ public class StudentService implements StudentI {
     @Override
     public void registerStudentToCourse(String email, int courseId) {
         Transaction transaction = null;
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
+        try {
+            SessionFactory factory = HibernateUtil.getSessionFactory();
+            Session session = factory.openSession();
             Student registeredStudent = getStudentByEmail(email, session);
             Course courseToUpdate = new CourseService().getCourseById(courseId, session);
             if (registeredStudent != null && courseToUpdate != null) {

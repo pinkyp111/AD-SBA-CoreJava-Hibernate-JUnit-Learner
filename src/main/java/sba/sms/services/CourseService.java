@@ -4,9 +4,9 @@ import jakarta.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import sba.sms.dao.CourseI;
 import sba.sms.models.Course;
+import sba.sms.utils.HibernateUtil;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class CourseService implements CourseI {
 
     /**
-     *          Inserting courses into DB
+     * Inserting courses into DB
      */
     @Override
     public void createCourse(Course course) {
@@ -26,8 +26,9 @@ public class CourseService implements CourseI {
             System.out.println("Course cannot be empty. Please provide a valid course!");
         } else {
             Transaction transaction = null;
-            try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-                 Session session = factory.openSession()) {
+            try {
+                SessionFactory factory = HibernateUtil.getSessionFactory();
+                Session session = factory.openSession();
                 transaction = session.beginTransaction();
                 session.persist(course);
                 transaction.commit();
@@ -43,10 +44,9 @@ public class CourseService implements CourseI {
     //Getting course back from DB based on courseId
     @Override
     public Course getCourseById(int courseId) {
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
-            return getCourseFromDB(courseId, session);
-        }
+        SessionFactory factory = HibernateUtil.getSessionFactory();
+        Session session = factory.openSession();
+        return getCourseFromDB(courseId, session);
     }
 
     //used to register student
@@ -63,13 +63,12 @@ public class CourseService implements CourseI {
     }
 
 
-   //Getting all courses back from DB
+    //Getting all courses back from DB
     @Override
     public List<Course> getAllCourses() {
-        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
-             Session session = factory.openSession()) {
-            return session.createQuery("SELECT c FROM Course c", Course.class).getResultList();
-        }
+        SessionFactory factory = HibernateUtil.getSessionFactory();
+        Session session = factory.openSession();
+        return session.createQuery("SELECT c FROM Course c", Course.class).getResultList();
     }
 
 }
